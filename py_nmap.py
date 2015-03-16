@@ -36,6 +36,17 @@ def jdb_test(ip,port):
     else:
         print stderrdata
 
+
+def rsync_test(ip,port):
+    p=subprocess.Popen(['rsync','--port=%s' %port,'%s::' %ip],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    #p.stdin.write('-h')
+    stdoutdata, stderrdata = p.communicate()
+    if stdoutdata:
+        return stdoutdata
+    else:
+        print stdoutdata
+    pass
+
 def pyscanner(ip,port):
     nm=nmap.PortScanner()
     nm.scan(hosts=ip, arguments='-sV -sS -T4 -p%s' % port)
@@ -69,6 +80,11 @@ def pyscanner(ip,port):
                         b=jdb_test(host,port)
                         if b:
                             write(port, nm[host][proto][port]['state'],'redis')
+                    elif nm[host][proto][port]['product']=='rsync':
+                        data=rsync_test(host,port)
+                        if data:
+                            write(port, nm[host][proto][port]['state'],'rsync')
+                            write(data)
                     else:
                         write(port, nm[host][proto][port]['state'],nm[host][proto][port]['product'])
 
