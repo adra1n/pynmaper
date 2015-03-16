@@ -15,8 +15,10 @@ def rsync_test(ip,port):
     p=subprocess.Popen(['rsync','--port=%s' %port,'%s::' %ip],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     #p.stdin.write('-h')
     stdoutdata, stderrdata = p.communicate()
-    print stdoutdata
-    print stderrdata
+    if stdoutdata:
+        return stdoutdata
+    else:
+        print stdoutdata
     pass
 
 if __name__ == '__main__':
