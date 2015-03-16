@@ -28,8 +28,13 @@ def redis_test(ip,port):
     else:
         pass
 
-def
-
+def jdb_test(ip,port):
+    p=subprocess.Popen(['jdb','-attach','%s:%s' %(ip,port)],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    stdoutdata, stderrdata = p.communicate()
+    if('Initializing jdb' in stdoutdata):
+        return 1
+    else:
+        print stderrdata
 
 def pyscanner(ip,port):
     nm=nmap.PortScanner()
@@ -58,6 +63,10 @@ def pyscanner(ip,port):
                             write(port, nm[host][proto][port]['state'],'memcache')
                     elif nm[host][proto][port]['product']=='redis':
                         b=redis_test(host,port)
+                        if b:
+                            write(port, nm[host][proto][port]['state'],'redis')
+                    elif nm[host][proto][port]['product']=='jdwp':
+                        b=jdb_test(host,port)
                         if b:
                             write(port, nm[host][proto][port]['state'],'redis')
                     else:

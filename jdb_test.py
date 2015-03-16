@@ -11,11 +11,13 @@
 import subprocess
 import sys
 
-def jdb_test():
-    p=subprocess.Popen(['jdb'],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+def jdb_test(ip,port):
+    p=subprocess.Popen(['jdb','-attach','%s:%s' %(ip,port)],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     stdoutdata, stderrdata = p.communicate()
     print stdoutdata
     print stderrdata
 
 if __name__ == '__main__':
-    jdb_test()
+    ip=sys.argv[1]
+    port=sys.argv[2]
+    jdb_test(ip,port)
