@@ -24,7 +24,7 @@ def telnet_test(ip,port):
     print 'finish'
 
 def redis_test(ip,port):
-    print ip,port
+    #print ip,port
     p=subprocess.Popen(['redis-cli', '-h', '%s' %ip, '-p', '%s' %port],shell=True,stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     #p.stdin.write('-h')
     if('redis_version' in stdoutdata ):
@@ -76,14 +76,14 @@ def pyscanner(ip,port):
                         b=telnet_test(host,port)
                         if b:
                             write_re(host,port, nm[host][proto][port]['state'],'memcache')
-                    elif nm[host][proto][port]['product']=='redis':
+                    elif nm[host][proto][port]['product']=='Redis key-value store':
                         b=redis_test(host,port)
                         if b:
                             write_re(host,port, nm[host][proto][port]['state'],'redis')
                     elif nm[host][proto][port]['product']=='jdwp':
                         b=jdb_test(host,port)
                         if b:
-                            write_re(host,port, nm[host][proto][port]['state'],'redis')
+                            write_re(host,port, nm[host][proto][port]['state'],'java debug')
                     elif nm[host][proto][port]['product']=='rsync':
                         data=rsync_test(host,port)
                         if data:
