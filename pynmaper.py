@@ -7,8 +7,8 @@ import threading
 import time
 import Queue
 
-def write(port,state,product):
-    result='port : %s\tstate : %s\tproduct:%s' % (port,state,product)
+def write_re(host,port,state,product):
+    result='host:%s\tport : %s\tstate : %s\tproduct:%s' % (host,port,state,product)
     with open('result.txt','a') as f:
         f.write(result+'\n')
 
@@ -58,8 +58,8 @@ def pyscanner(ip,port):
     print nm.command_line()
     print nm.all_hosts()
     for host in nm.all_hosts():
-        write(host)
-        write('---------------------')
+        #write_re(host)
+        #write_re('---------------------')
         #print('Host : %s (%s)' % (host, nm[host].hostname()))
         #print('State : %s' % nm[host].state())
         for proto in nm[host].all_protocols():
@@ -75,22 +75,22 @@ def pyscanner(ip,port):
                     if nm[host][proto][port]['product']=='Memcached':
                         b=telnet_test(host,port)
                         if b:
-                            write(port, nm[host][proto][port]['state'],'memcache')
+                            write_re(host,port, nm[host][proto][port]['state'],'memcache')
                     elif nm[host][proto][port]['product']=='redis':
                         b=redis_test(host,port)
                         if b:
-                            write(port, nm[host][proto][port]['state'],'redis')
+                            write_re(host,port, nm[host][proto][port]['state'],'redis')
                     elif nm[host][proto][port]['product']=='jdwp':
                         b=jdb_test(host,port)
                         if b:
-                            write(port, nm[host][proto][port]['state'],'redis')
+                            write_re(host,port, nm[host][proto][port]['state'],'redis')
                     elif nm[host][proto][port]['product']=='rsync':
                         data=rsync_test(host,port)
                         if data:
-                            write(port, nm[host][proto][port]['state'],'rsync')
-                            write(data)
+                            write_re(host,port, nm[host][proto][port]['state'],'rsync')
+                            write_re(data)
                     else:
-                        write(port, nm[host][proto][port]['state'],nm[host][proto][port]['product'])
+                        write_re(host,port, nm[host][proto][port]['state'],nm[host][proto][port]['product'])
 
 
 SHARE_Q = Queue.Queue()
@@ -121,7 +121,7 @@ def worker() :
 def main() :
     global SHARE_Q
     threads = []
-    for task in xrange(1,2555) :
+    for task in xrange(1,50) :
         SHARE_Q.put(task)
 
     for i in xrange(_WORKER_THREAD_NUM) :
