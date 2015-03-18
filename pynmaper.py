@@ -39,6 +39,7 @@ def jdb_test(ip,port):
         return 1
     else:
         print stderrdata
+        pass
 
 
 def rsync_test(ip,port):
@@ -80,7 +81,7 @@ def pyscanner(ip,port):
                         b=redis_test(host,port)
                         if b:
                             write_re(host,port, nm[host][proto][port]['state'],'redis')
-                    elif nm[host][proto][port]['product']=='jdwp':
+                    elif nm[host][proto][port]['product']=='Java Debug Wire Protocol':
                         b=jdb_test(host,port)
                         if b:
                             write_re(host,port, nm[host][proto][port]['state'],'java debug')
@@ -121,7 +122,7 @@ def worker() :
 def main() :
     global SHARE_Q
     threads = []
-    for task in xrange(1,50) :
+    for task in xrange(200,255) :
         SHARE_Q.put(task)
 
     for i in xrange(_WORKER_THREAD_NUM) :
