@@ -13,7 +13,7 @@ def write_re(host,port,state,product):
         f.write(result+'\n')
 
 
-def telnet_test(ip,port):
+def memcache_test(ip,port):
 
     tn=telnetlib.Telnet(ip,port)
     tn.write('stats\n')
@@ -74,7 +74,7 @@ def pyscanner(ip,port):
 
                     #print result
                     if nm[host][proto][port]['product']=='Memcached':
-                        b=telnet_test(host,port)
+                        b=memcache_test(host,port)
                         if b:
                             write_re(host,port, nm[host][proto][port]['state'],'memcache')
                     elif nm[host][proto][port]['product']=='Redis key-value store':
